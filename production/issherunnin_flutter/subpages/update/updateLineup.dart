@@ -4,49 +4,37 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-class UpdateFlanders extends StatelessWidget {
+class UpdateLineup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: AppColors.MAINTEXTWHITE, //change your color here
-        ),
-        title: Image.asset('assets/images/ferrylogo-horizontal.png',
-            fit: BoxFit.cover, width: 300),
-        toolbarHeight: 100,
-        backgroundColor: AppColors.PRIMARY_COLOR,
-        centerTitle: true,
-      ),
-      body: Container(
-          width: screenWidth * 0.9,
-          height: screenHeight * 0.7,
-          child: BoatStatusWidget()
-          // child: Text(
-          //   "Update Flanders",
-          //   style: TextStyle(
-          //     color: AppColors.MAINTEXTBLACK,
-          //     fontFamily: 'Poppins',
-          //     fontSize: 22.0,
-          //   ),
-          // ),
-          ),
-    );
+    return Container(
+        width: screenWidth * 0.9,
+        height: screenHeight * 0.7,
+        child: LineupStatusWidget()
+        // child: Text(
+        //   "Update Flanders",
+        //   style: TextStyle(
+        //     color: AppColors.MAINTEXTBLACK,
+        //     fontFamily: 'Poppins',
+        //     fontSize: 22.0,
+        //   ),
+        // ),
+        );
   }
 }
 
 /// This is the stateful widget that the main application instantiates.
-class BoatStatusWidget extends StatefulWidget {
-  const BoatStatusWidget({Key key}) : super(key: key);
+class LineupStatusWidget extends StatefulWidget {
+  const LineupStatusWidget({Key key}) : super(key: key);
 
   @override
-  _BoatUpdateStatus createState() => _BoatUpdateStatus();
+  _LineupUpdateStatus createState() => _LineupUpdateStatus();
 }
 
 /// This is the private State class that goes with MyStatefulWidget.
-class _BoatUpdateStatus extends State<BoatStatusWidget> {
+class _LineupUpdateStatus extends State<LineupStatusWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -65,7 +53,7 @@ class _BoatUpdateStatus extends State<BoatStatusWidget> {
                         elevation: 5,
                         child: Container(
                             padding: EdgeInsets.fromLTRB(10, 30, 10, 30),
-                            child: Text("Update Flanders' Status",
+                            child: Text("Update Lineup' Status",
                                 style: TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.w600)))),
@@ -74,11 +62,11 @@ class _BoatUpdateStatus extends State<BoatStatusWidget> {
                       padding: EdgeInsets.fromLTRB(10, 50, 10, 20),
                       child: TextFormField(
                         decoration: const InputDecoration(
-                          hintText: 'Enter the status: ',
+                          hintText: 'Enter the # of cars: ',
                         ),
                         validator: (String value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please choose a status';
+                            return 'Please enter a number';
                           }
                           return null;
                         },
@@ -87,11 +75,11 @@ class _BoatUpdateStatus extends State<BoatStatusWidget> {
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
                         decoration: const InputDecoration(
-                          hintText: 'Enter the reason(if known): ',
+                          hintText: 'Choose a side: ',
                         ),
                         validator: (String value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter the reason';
+                            return 'Please choose an option';
                           }
                           return null;
                         },
@@ -100,11 +88,11 @@ class _BoatUpdateStatus extends State<BoatStatusWidget> {
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
                         decoration: const InputDecoration(
-                          hintText: 'Enter any notes: ',
+                          hintText: 'What is the location of lineup? ',
                         ),
                         validator: (String value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter some notes';
+                            return 'Enter a location';
                           }
                           return null;
                         },
@@ -122,49 +110,34 @@ class _BoatUpdateStatus extends State<BoatStatusWidget> {
                       child: const Text('Submit'),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 30.0),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            AppColors.MAINTEXTWHITE),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            AppColors.FOURTH_COLOR),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Back'),
-                    ),
-                  ),
                 ],
               ),
             )));
   }
 }
 
-class AddBoatStatus extends StatelessWidget {
-  final String status;
+class AddLineupStatus extends StatelessWidget {
+  final String cars;
   final DateTime datetime;
-  final String reason;
-  final String note;
+  final String side;
+  final String location;
 
-  AddBoatStatus(this.datetime, this.status, this.reason, this.note);
+  AddLineupStatus(this.datetime, this.cars, this.side, this.location);
 
   @override
   Widget build(BuildContext context) {
     // Create a CollectionReference called users that references the firestore collection
-    CollectionReference boatStatus =
-        FirebaseFirestore.instance.collection('flanders');
+    CollectionReference lineupStatus =
+        FirebaseFirestore.instance.collection('lineup');
 
-    Future<void> addBoatStatus() {
+    Future<void> addLineupStatus() {
       // Call the user's CollectionReference to add a new user
-      return boatStatus
+      return lineupStatus
           .add({
             'datetime': datetime,
-            'status': status,
-            'reason': reason,
-            'note': note
+            'cars': cars,
+            'side': side,
+            'location': location
           })
           .then((value) => PlatformAlertDialog(
                 title: Text('AlertDialog Title'),
@@ -201,9 +174,9 @@ class AddBoatStatus extends StatelessWidget {
     }
 
     return TextButton(
-      onPressed: addBoatStatus,
+      onPressed: addLineupStatus,
       child: Text(
-        "Update Flanders",
+        "Update Lineup",
       ),
     );
   }

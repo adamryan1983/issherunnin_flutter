@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'flanders.dart';
-import 'legionnaire.dart';
 import 'package:issherunnin_flutter/constants/Colors.dart';
+import 'package:issherunnin_flutter/subpages/update/updateLineup.dart';
+import 'package:issherunnin_flutter/subpages/update/updateBoat.dart';
 
-class FerryPage extends StatelessWidget {
+class UpdatePage extends StatelessWidget {
   static Route<dynamic> route() => MaterialPageRoute(
-        builder: (context) => FerryPage(),
+        builder: (context) => UpdatePage(),
       );
 
   @override
@@ -19,12 +18,12 @@ class FerryPage extends StatelessWidget {
             bottom: TabBar(
               tabs: [
                 Text(
-                  "Flanders",
-                  style: TextStyle(fontFamily: 'Montserrat', fontSize: 15),
+                  "Update Lineup",
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
                 ),
                 Text(
-                  "Legionnaire",
-                  style: TextStyle(fontFamily: 'Montserrat', fontSize: 15),
+                  "Update Ferry",
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
                 ),
               ],
             ),
@@ -34,7 +33,7 @@ class FerryPage extends StatelessWidget {
             backgroundColor: AppColors.PRIMARY_COLOR,
           ),
           body: TabBarView(
-            children: [Flanders(), Legionnaire()],
+            children: [UpdateLineup(), UpdateBoat()],
           ),
         ),
       ),

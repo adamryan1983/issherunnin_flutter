@@ -4,7 +4,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-class UpdateFlanders extends StatelessWidget {
+class UpdateLegionnaire extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -65,7 +65,7 @@ class _BoatUpdateStatus extends State<BoatStatusWidget> {
                         elevation: 5,
                         child: Container(
                             padding: EdgeInsets.fromLTRB(10, 30, 10, 30),
-                            child: Text("Update Flanders' Status",
+                            child: Text("Update Legionnaire's Status",
                                 style: TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.w600)))),
@@ -155,7 +155,7 @@ class AddBoatStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     // Create a CollectionReference called users that references the firestore collection
     CollectionReference boatStatus =
-        FirebaseFirestore.instance.collection('flanders');
+        FirebaseFirestore.instance.collection('legionnaire');
 
     Future<void> addBoatStatus() {
       // Call the user's CollectionReference to add a new user
@@ -203,7 +203,7 @@ class AddBoatStatus extends StatelessWidget {
     return TextButton(
       onPressed: addBoatStatus,
       child: Text(
-        "Update Flanders",
+        "Update Legionnaire",
       ),
     );
   }
