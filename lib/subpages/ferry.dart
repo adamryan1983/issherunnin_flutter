@@ -20,11 +20,11 @@ class FerryPage extends StatelessWidget {
               tabs: [
                 Text(
                   "Flanders",
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 15),
+                  style: TextStyle(fontFamily: 'Montserrat', fontSize: 15),
                 ),
                 Text(
                   "Legionnaire",
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 15),
+                  style: TextStyle(fontFamily: 'Montserrat', fontSize: 15),
                 ),
               ],
             ),

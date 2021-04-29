@@ -10,7 +10,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: "Is She Runnin'?",
       theme: ThemeData(
-          fontFamily: 'Poppins',
+          fontFamily: 'Montserrat',
           backgroundColor: AppColors.PRIMARY_COLOR,
           primaryColor: AppColors.PRIMARY_COLOR,
           primaryColorLight: AppColors.MAINTEXTBLACK,

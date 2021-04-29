@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
           "Hello, Home!",
           style: TextStyle(
             color: AppColors.MAINTEXTBLACK,
-            fontFamily: 'Poppins',
+            fontFamily: 'Montserrat',
             fontSize: 22.0,
           ),
         ),
