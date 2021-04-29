@@ -9,22 +9,38 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Image.asset('assets/images/ferrylogo-horizontal.png',
-            fit: BoxFit.cover, width: 300),
-        toolbarHeight: 100,
-        backgroundColor: AppColors.PRIMARY_COLOR,
-      ),
-      body: Center(
-        child: Text(
-          "Hello, Home!",
-          style: TextStyle(
-            color: AppColors.MAINTEXTBLACK,
-            fontFamily: 'Montserrat',
-            fontSize: 22.0,
-          ),
+        appBar: AppBar(
+          title: Image.asset('assets/images/ferrylogo-horizontal.png',
+              fit: BoxFit.cover, width: 300),
+          toolbarHeight: 100,
+          backgroundColor: AppColors.PRIMARY_COLOR,
         ),
-      ),
-    );
+        body: Center(
+            child: Column(
+          children: [
+            Image.asset('assets/images/logo.png',
+                fit: BoxFit.cover, width: 250),
+            Container(
+              child: Text(
+                "Hello, ",
+                style: TextStyle(
+                  color: AppColors.MAINTEXTBLACK,
+                  fontFamily: 'Montserrat',
+                  fontSize: 22.0,
+                ),
+              ),
+            ),
+            Container(
+              child: Text(
+                "Hello, Home!",
+                style: TextStyle(
+                  color: AppColors.MAINTEXTBLACK,
+                  fontFamily: 'Montserrat',
+                  fontSize: 22.0,
+                ),
+              ),
+            )
+          ],
+        )));
   }
 }

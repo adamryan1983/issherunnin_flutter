@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:issherunnin_flutter/constants/Colors.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import './Verification.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class UpdateLineup extends StatelessWidget {
   @override
@@ -12,7 +12,7 @@ class UpdateLineup extends StatelessWidget {
     return Container(
         width: screenWidth * 0.9,
         height: screenHeight * 0.7,
-        child: UpdateLineupWidget()
+        child: LineupStatusWidget()
         // child: Text(
         //   "Update Flanders",
         //   style: TextStyle(
@@ -26,18 +26,16 @@ class UpdateLineup extends StatelessWidget {
 }
 
 /// This is the stateful widget that the main application instantiates.
-class UpdateLineupWidget extends StatefulWidget {
-  const UpdateLineupWidget({Key key}) : super(key: key);
+class LineupStatusWidget extends StatefulWidget {
+  const LineupStatusWidget({Key key}) : super(key: key);
 
   @override
   _LineupUpdateStatus createState() => _LineupUpdateStatus();
 }
 
 /// This is the private State class that goes with MyStatefulWidget.
-class _LineupUpdateStatus extends State<UpdateLineupWidget> {
+class _LineupUpdateStatus extends State<LineupStatusWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _validate = false;
-  String cars, side, location;
 
   @override
   Widget build(BuildContext context) {
@@ -63,77 +61,55 @@ class _LineupUpdateStatus extends State<UpdateLineupWidget> {
                   Container(
                       padding: EdgeInsets.fromLTRB(10, 50, 10, 20),
                       child: TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: 'Enter the # of cars: ',
-                          ),
-                          validator: (String value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a number';
-                            }
-                            return null;
-                          },
-                          onSaved: (String val) {
-                            cars = val;
-                          })),
+                        decoration: const InputDecoration(
+                          hintText: 'Enter the # of cars: ',
+                        ),
+                        validator: (String value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a number';
+                          }
+                          return null;
+                        },
+                      )),
                   Container(
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: 'Choose a side: ',
-                          ),
-                          validator: (String value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please choose an option';
-                            }
-                            return null;
-                          },
-                          onSaved: (String val) {
-                            side = val;
-                          })),
+                        decoration: const InputDecoration(
+                          hintText: 'Choose a side: ',
+                        ),
+                        validator: (String value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please choose an option';
+                          }
+                          return null;
+                        },
+                      )),
                   Container(
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: 'What is the location of lineup? ',
-                          ),
-                          validator: (String value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Enter a location';
-                            }
-                            return null;
-                          },
-                          onSaved: (String val) {
-                            location = val;
-                          })),
+                        decoration: const InputDecoration(
+                          hintText: 'What is the location of lineup? ',
+                        ),
+                        validator: (String value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Enter a location';
+                          }
+                          return null;
+                        },
+                      )),
                   Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30.0),
-                      child: ElevatedButton(
-                          onPressed: () {
-                            // Validate will return true if the form is valid, or false if
-                            // the form is invalid.
-                            if (!_formKey.currentState.validate()) {
-                              FirebaseFirestore firestore =
-                                  FirebaseFirestore.instance;
-                              firestore.runTransaction(
-                                  (Transaction transaction) async {
-                                CollectionReference reference =
-                                    firestore.collection('lineup');
-                                await reference.add({
-                                  "cars": "$cars",
-                                  "side": "$side",
-                                  "geolocation": "$location"
-                                });
-                              });
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Verification()),
-                              );
-                            } else {
-                              print("error");
-                            }
-                          },
-                          child: Text('Submit'))),
+                    padding: const EdgeInsets.symmetric(vertical: 30.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Validate will return true if the form is valid, or false if
+                        // the form is invalid.
+                        if (!_formKey.currentState.validate()) {
+                          // Process data.
+                        }
+                      },
+                      child: const Text('Submit'),
+                    ),
+                  ),
                 ],
               ),
             )));

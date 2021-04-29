@@ -60,4 +60,4 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:27.1.0')
 }
 
-apply plugin: 'com.google.gms.google-servics'
+apply plugin: 'com.google.gms.google-services'
