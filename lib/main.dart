@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'tabs.dart';
 import 'package:issherunnin_flutter/constants/Colors.dart';
 import 'package:firebase_core/firebase_core.dart';
+import './controllers/issignedin.dart';
+import 'package:get/get.dart';
+import './controllers/instanceBinding.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

@@ -17,12 +17,29 @@ class HomePage extends StatelessWidget {
         ),
         body: Center(
             child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Container(
+                child: Text('Welcome',
+                    style:
+                        TextStyle(fontSize: 25, fontWeight: FontWeight.w600))),
             Image.asset('assets/images/logo.png',
                 fit: BoxFit.cover, width: 250),
             Container(
+              padding: EdgeInsets.fromLTRB(30, 60, 30, 20),
               child: Text(
-                "Hello, ",
+                "This is an app for viewing and maintaining Ferry & Lineup information for the Bell Island/Portugal Cove-St.Philips ferry service",
+                style: TextStyle(
+                  color: AppColors.MAINTEXTBLACK,
+                  fontFamily: 'Montserrat',
+                  fontSize: 15.0,
+                ),
+              ),
+            ),
+            Container(
+              child: Text(
+                "You are currently 'not logged in'",
                 style: TextStyle(
                   color: AppColors.MAINTEXTBLACK,
                   fontFamily: 'Montserrat',
@@ -32,11 +49,11 @@ class HomePage extends StatelessWidget {
             ),
             Container(
               child: Text(
-                "Hello, Home!",
+                "Please log in for updating functionality",
                 style: TextStyle(
                   color: AppColors.MAINTEXTBLACK,
                   fontFamily: 'Montserrat',
-                  fontSize: 22.0,
+                  fontSize: 12.0,
                 ),
               ),
             )
