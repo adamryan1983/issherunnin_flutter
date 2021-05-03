@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:issherunnin_flutter/constants/Colors.dart';
+import '../utils/root.dart';
 
 class HomePage extends StatelessWidget {
   static Route<dynamic> route() => MaterialPageRoute(
@@ -37,16 +38,16 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              child: Text(
-                "You are currently 'not logged in'",
-                style: TextStyle(
-                  color: AppColors.MAINTEXTBLACK,
-                  fontFamily: 'Montserrat',
-                  fontSize: 22.0,
+            Container(child: CheckLogged()
+                // Text(
+                //   "You are currently 'not logged in'",
+                //   style: TextStyle(
+                //     color: AppColors.MAINTEXTBLACK,
+                //     fontFamily: 'Montserrat',
+                //     fontSize: 22.0,
+                //   ),
+                // ),
                 ),
-              ),
-            ),
             Container(
               child: Text(
                 "Please log in for updating functionality",
