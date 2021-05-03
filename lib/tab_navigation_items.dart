@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:issherunnin_flutter/subpages/ferry.dart';
 import 'package:issherunnin_flutter/subpages/home.dart';
 import 'package:issherunnin_flutter/subpages/lineup.dart';
-import 'package:issherunnin_flutter/subpages/update.dart';
-import 'package:issherunnin_flutter/subpages/user.dart';
 import './utils/checkLogged.dart';
 import './utils/updateFunctionality.dart';
 
