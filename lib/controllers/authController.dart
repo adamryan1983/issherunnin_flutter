@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../subpages/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import '../subpages/home.dart';
+import '../tabs.dart';
 
 class AuthController extends GetxController {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -18,7 +18,7 @@ class AuthController extends GetxController {
 
   @override
   void onInit() {
-    _firebaseUser.bindStream(_auth.authStateChanges());
+    _firebaseUser.bindStream(_auth.userChanges());
   }
 
   void createUser(
@@ -28,12 +28,13 @@ class AuthController extends GetxController {
     Map<String, String> userdata = {
       "firstname": firstname,
       "lastname": lastname,
-      "email": email
+      "email": email,
+      "password": password
     };
     await _auth
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
-      reference.add(userdata).then((value) => Get.offAll(HomePage()));
+      reference.add(userdata).then((value) => Get.offAll(TabsPage()));
     }).catchError(
       (onError) => Get.snackbar(
           "Error while creating account ", onError.message,
@@ -43,23 +44,31 @@ class AuthController extends GetxController {
 
   void login(String email, String password) {
     try {
-      _auth.signInWithEmailAndPassword(email: email, password: password);
+      _auth
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) => Get.offAll(TabsPage()));
     } catch (e) {
       Get.snackbar("Error logging in", e.message,
           snackPosition: SnackPosition.BOTTOM);
     }
   }
 
-  void signOut(String email, String password) async {
+  void signOut() async {
     try {
-      await _auth.signOut();
+      await _auth.signOut().then((value) => Get.offAll(TabsPage()));
     } catch (e) {
       Get.snackbar("Error signing out", e.message,
           snackPosition: SnackPosition.BOTTOM);
     }
   }
 
-  void google_signIn() async {
+  void signInGoogle() async {
+    GoogleSignIn googleSignIn = GoogleSignIn(
+      scopes: ['email', 'profile'],
+      hostedDomain: "localhost",
+      clientId:
+          "com.googleusercontent.apps.583036361329-c1oikefkavt99so5jrr8c9nrat2rb8hk",
+    );
     final GoogleSignInAccount googleUser = await googleSignIn.signIn();
 
     final GoogleSignInAuthentication googleAuth =
@@ -73,11 +82,11 @@ class AuthController extends GetxController {
         .then((value) => Get.offAll(UserPage())));
   }
 
-  void google_signOut() async {
-    await googleSignIn.signOut().then((value) => Get.offAll(HomePage()));
+  void signOutGoogle() async {
+    await googleSignIn.signOut().then((value) => Get.offAll(TabsPage()));
   }
 
-  Future<Null> fb_login() async {
+  Future<dynamic> loginFb() async {
     final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
 
     switch (result.status) {

@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'tabs.dart';
 import 'package:issherunnin_flutter/constants/Colors.dart';
 import 'package:firebase_core/firebase_core.dart';
-import './controllers/issignedin.dart';
 import 'package:get/get.dart';
-import './controllers/instanceBinding.dart';
+import './controllers/authBinding.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(App());
+  // await Firebase.initializeApp();
+  runApp(AppExtended());
 }
 
-class AppMain extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
+      initialBinding: AuthBinder(),
       title: "Is She Runnin'?",
       theme: ThemeData(
           fontFamily: 'Montserrat',
@@ -29,10 +30,9 @@ class AppMain extends StatelessWidget {
   }
 }
 
-class App extends StatelessWidget {
+class AppExtended extends StatelessWidget {
   // Create the initialization Future outside of `build`:
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -46,7 +46,7 @@ class App extends StatelessWidget {
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
-          return AppMain();
+          return App();
         }
 
         // Otherwise, show something whilst waiting for initialization to complete

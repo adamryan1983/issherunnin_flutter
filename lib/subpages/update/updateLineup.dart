@@ -1,207 +1,91 @@
 import 'package:flutter/material.dart';
 import 'package:issherunnin_flutter/constants/Colors.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import './Verification.dart';
+import 'package:get/get.dart';
+import 'package:issherunnin_flutter/controllers/lineupController.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
-class UpdateLineup extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    return Container(
-        width: screenWidth * 0.9,
-        height: screenHeight * 0.7,
-        child: UpdateLineupWidget()
-        // child: Text(
-        //   "Update Flanders",
-        //   style: TextStyle(
-        //     color: AppColors.MAINTEXTBLACK,
-        //     fontFamily: 'Poppins',
-        //     fontSize: 22.0,
-        //   ),
-        // ),
-        );
-  }
-}
-
-/// This is the stateful widget that the main application instantiates.
-class UpdateLineupWidget extends StatefulWidget {
-  const UpdateLineupWidget({Key key}) : super(key: key);
-
-  @override
-  _LineupUpdateStatus createState() => _LineupUpdateStatus();
-}
-
-/// This is the private State class that goes with MyStatefulWidget.
-class _LineupUpdateStatus extends State<UpdateLineupWidget> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _validate = false;
-  String cars, side, location;
+// ignore: must_be_immutable
+class UpdateLineup extends GetWidget<LineupController> {
+  final TextEditingController cars = TextEditingController();
+  final TextEditingController location = TextEditingController();
+  String status;
+  bool _selected = false;
+  List<dynamic> items = [
+    'Please select a side',
+    'Bell Island',
+    'Portugal Cove-St. Philips'
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Form(
-            key: _formKey,
-            child: Container(
-              padding: new EdgeInsets.all(10.0),
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            child: Text("Update Current Lineup Conditions",
+                style:
+                    (TextStyle(fontSize: 22, color: AppColors.FOURTH_COLOR))),
+          ),
+          Padding(
+              padding: EdgeInsets.fromLTRB(20, 10.0, 20.0, 20.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Container(
-                    child: Material(
-                        elevation: 5,
-                        child: Container(
-                            padding: EdgeInsets.fromLTRB(10, 30, 10, 30),
-                            child: Text("Update Lineup' Status",
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.w600)))),
-                  ),
-                  Container(
-                      padding: EdgeInsets.fromLTRB(10, 50, 10, 20),
-                      child: TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: 'Enter the # of cars: ',
-                          ),
-                          validator: (String value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a number';
-                            }
-                            return null;
-                          },
-                          onSaved: (String val) {
-                            cars = val;
-                          })),
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      child: TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: 'Choose a side: ',
-                          ),
-                          validator: (String value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please choose an option';
-                            }
-                            return null;
-                          },
-                          onSaved: (String val) {
-                            side = val;
-                          })),
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      child: TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: 'What is the location of lineup? ',
-                          ),
-                          validator: (String value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Enter a location';
-                            }
-                            return null;
-                          },
-                          onSaved: (String val) {
-                            location = val;
-                          })),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30.0),
-                      child: ElevatedButton(
-                          onPressed: () {
-                            // Validate will return true if the form is valid, or false if
-                            // the form is invalid.
-                            if (!_formKey.currentState.validate()) {
-                              FirebaseFirestore firestore =
-                                  FirebaseFirestore.instance;
-                              firestore.runTransaction(
-                                  (Transaction transaction) async {
-                                CollectionReference reference =
-                                    firestore.collection('lineup');
-                                await reference.add({
-                                  "cars": "$cars",
-                                  "side": "$side",
-                                  "geolocation": "$location"
-                                });
-                              });
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Verification()),
+                  Column(
+                    children: <Widget>[
+                      Container(
+                          padding: EdgeInsets.fromLTRB(10, 50, 10, 10),
+                          child: Text('Select which side:')),
+                      Obx(() => DropdownButton(
+                            onChanged: (newValue) {
+                              controller.setSelectedSide(newValue);
+                            },
+                            value: _selected
+                                ? controller.selectedSide.value
+                                : controller.selectedSide.value,
+                            items: items.map((selectedType) {
+                              return DropdownMenuItem(
+                                child: new Text(
+                                  selectedType,
+                                ),
+                                value: selectedType,
                               );
-                            } else {
-                              print("error");
-                            }
+                            }).toList(),
+                          )),
+                      TextField(
+                        controller: cars,
+                        decoration: InputDecoration(
+                          labelText: "Enter number of vehicles",
+                          hintText: "i.e. 25",
+                        ),
+                        autofocus: true,
+                      ),
+                      TextField(
+                        controller: location,
+                        decoration: InputDecoration(
+                          labelText: "Approx. Location",
+                          hintText: "i.e. Up to ticket booth",
+                        ),
+                        autofocus: true,
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(10, 50, 10, 0),
+                        child: SignInButtonBuilder(
+                          text: 'Update',
+                          icon: Icons.add_comment_outlined,
+                          onPressed: () {
+                            controller.setLineupStatus(cars.text,
+                                controller.selectedSide.value, location.text);
                           },
-                          child: Text('Submit'))),
-                ],
-              ),
-            )));
-  }
-}
-
-class AddLineupStatus extends StatelessWidget {
-  final String cars;
-  final DateTime datetime;
-  final String side;
-  final String location;
-
-  AddLineupStatus(this.datetime, this.cars, this.side, this.location);
-
-  @override
-  Widget build(BuildContext context) {
-    // Create a CollectionReference called users that references the firestore collection
-    CollectionReference lineupStatus =
-        FirebaseFirestore.instance.collection('lineup');
-
-    Future<void> addLineupStatus() {
-      // Call the user's CollectionReference to add a new user
-      return lineupStatus
-          .add({
-            'datetime': datetime,
-            'cars': cars,
-            'side': side,
-            'location': location
-          })
-          .then((value) => PlatformAlertDialog(
-                title: Text('AlertDialog Title'),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[Text('Status Updated')],
-                  ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('Close'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
+                          backgroundColor: Colors.blueGrey[700],
+                          width: 180.0,
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ))
-          .catchError((error) => PlatformAlertDialog(
-                title: Text('AlertDialog Title'),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[Text('Error Updating!')],
-                  ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('Close'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ));
-    }
-
-    return TextButton(
-      onPressed: addLineupStatus,
-      child: Text(
-        "Update Lineup",
-      ),
-    );
+        ]);
   }
 }

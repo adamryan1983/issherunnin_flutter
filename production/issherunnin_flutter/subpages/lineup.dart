@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 String dateConvert(timestamp, raw) {
-  var timeSec = timestamp.seconds;
   final df = new DateFormat('dd-MM-yyyy hh:mm a');
   int myvalue = timestamp.seconds;
   var val = df.format(new DateTime.fromMillisecondsSinceEpoch(myvalue * 1000));

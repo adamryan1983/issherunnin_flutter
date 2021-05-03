@@ -12,14 +12,6 @@ class Signup extends GetWidget<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    void _showButtonPressDialog(BuildContext context, String provider) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('$provider Button Pressed!'),
-        backgroundColor: Colors.black26,
-        duration: Duration(milliseconds: 400),
-      ));
-    }
-
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
@@ -40,6 +32,22 @@ class Signup extends GetWidget<AuthController> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
+                          TextField(
+                            controller: firstn,
+                            decoration: InputDecoration(
+                              labelText: "First Name",
+                              hintText: "John",
+                            ),
+                            autofocus: true,
+                          ),
+                          TextField(
+                            controller: lastn,
+                            decoration: InputDecoration(
+                              labelText: "Last Name",
+                              hintText: "Smith",
+                            ),
+                            autofocus: true,
+                          ),
                           TextField(
                             controller: email,
                             decoration: InputDecoration(
@@ -64,7 +72,8 @@ class Signup extends GetWidget<AuthController> {
                               text: 'Sign Up',
                               icon: Icons.email,
                               onPressed: () {
-                                _showButtonPressDialog(context, 'Email');
+                                controller.createUser(firstn.text, lastn.text,
+                                    email.text, password.text);
                               },
                               backgroundColor: Colors.blueGrey[700],
                               width: 180.0,

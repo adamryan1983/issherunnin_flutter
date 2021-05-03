@@ -3,18 +3,16 @@ import 'package:flutter/painting.dart';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:issherunnin_flutter/constants/Colors.dart';
 import 'package:issherunnin_flutter/controllers/authController.dart';
 import 'package:issherunnin_flutter/subpages/signup.dart';
+import '../utils/checkLogged.dart';
 
 //ignore: must_be_immutable
 class UserPage extends GetWidget<AuthController> {
   final TextEditingController email = TextEditingController();
   final TextEditingController pass = TextEditingController();
-  String emailtemp, passwordtemp;
 
   static Route<dynamic> route() => MaterialPageRoute(
         builder: (context) => UserPage(),
@@ -51,9 +49,6 @@ class UserPage extends GetWidget<AuthController> {
                         hintText: "example@mail.com",
                       ),
                       autofocus: true,
-                      onChanged: (String text) {
-                        emailtemp = text;
-                      },
                     ),
                     TextField(
                       controller: pass,
@@ -62,9 +57,6 @@ class UserPage extends GetWidget<AuthController> {
                       ),
                       autofocus: true,
                       obscureText: true,
-                      onChanged: (String text) {
-                        passwordtemp = text;
-                      },
                     ),
                     Container(
                       width: 10,
@@ -74,9 +66,6 @@ class UserPage extends GetWidget<AuthController> {
                         text: 'Sign In',
                         icon: Icons.email,
                         onPressed: () {
-                          print("Pressed");
-                          print(email.text);
-                          print(pass.text);
                           controller.login(email.text, pass.text);
                         },
                         backgroundColor: Colors.blueGrey[700],
@@ -85,23 +74,6 @@ class UserPage extends GetWidget<AuthController> {
                     )
                   ],
                 )),
-            // GestureDetector(
-            //   // When the child is tapped, show a snackbar.
-            //   onTap: () {
-            //     final snackBar = SnackBar(content: Text("Tap"));
-            //     controller.login(email.text, pass.text);
-            //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            //   },
-            //   // The custom button
-            //   child: Container(
-            //     padding: EdgeInsets.all(12.0),
-            //     decoration: BoxDecoration(
-            //       color: Theme.of(context).buttonColor,
-            //       borderRadius: BorderRadius.circular(8.0),
-            //     ),
-            //     child: Text('My Button'),
-            //   ),
-            // ),
             Container(
                 padding: EdgeInsets.fromLTRB(50, 10.0, 50.0, 0),
                 child: Text("Or",
@@ -131,12 +103,16 @@ class UserPage extends GetWidget<AuthController> {
             Divider(),
             SignInButton(
               Buttons.GoogleDark,
-              onPressed: () {},
+              onPressed: () {
+                controller.signInGoogle();
+              },
             ),
             Divider(),
             SignInButton(
               Buttons.FacebookNew,
-              onPressed: () {},
+              onPressed: () {
+                controller.loginFb();
+              },
             ),
             Divider(),
             SignInButton(
@@ -147,10 +123,6 @@ class UserPage extends GetWidget<AuthController> {
         ),
       ),
     );
-  }
-
-  void _login() {
-    controller.login(email.text, pass.text);
   }
 }
 
