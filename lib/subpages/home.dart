@@ -38,26 +38,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            Container(child: CheckLogged()
-                // Text(
-                //   "You are currently 'not logged in'",
-                //   style: TextStyle(
-                //     color: AppColors.MAINTEXTBLACK,
-                //     fontFamily: 'Montserrat',
-                //     fontSize: 22.0,
-                //   ),
-                // ),
-                ),
-            Container(
-              child: Text(
-                "Please log in for updating functionality",
-                style: TextStyle(
-                  color: AppColors.MAINTEXTBLACK,
-                  fontFamily: 'Montserrat',
-                  fontSize: 12.0,
-                ),
-              ),
-            )
+            Container(child: CheckLogged()),
           ],
         )));
   }

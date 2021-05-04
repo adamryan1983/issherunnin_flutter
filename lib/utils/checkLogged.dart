@@ -54,7 +54,7 @@ class IsLogged extends GetWidget<AuthController> {
                 onPressed: () {
                   controller.signOut();
                 },
-              ))
+              )),
             ])));
   }
 }

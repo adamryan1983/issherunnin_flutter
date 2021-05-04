@@ -7,7 +7,6 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:issherunnin_flutter/constants/Colors.dart';
 import 'package:issherunnin_flutter/controllers/authController.dart';
 import 'package:issherunnin_flutter/subpages/signup.dart';
-import '../utils/checkLogged.dart';
 
 //ignore: must_be_immutable
 class UserPage extends GetWidget<AuthController> {
@@ -111,7 +110,7 @@ class UserPage extends GetWidget<AuthController> {
             SignInButton(
               Buttons.FacebookNew,
               onPressed: () {
-                controller.loginFb();
+                controller.signInWithFacebook();
               },
             ),
             Divider(),
@@ -125,46 +124,3 @@ class UserPage extends GetWidget<AuthController> {
     );
   }
 }
-
-// ignore: must_be_immutable
-// class UserPage extends GetWidget<AuthController> {
-//   TextEditingController email = TextEditingController(text: 'email');
-//   TextEditingController pass = TextEditingController(text: 'password');
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         body: SafeArea(
-//       child: Stack(
-//         children: [
-//           Padding(
-//             padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-//             child: TextField(
-//               controller: pass,
-//               decoration: InputDecoration(
-//                 hintText: 'Password',
-//                 hintStyle: TextStyle(color: Colors.black),
-//                 enabledBorder: OutlineInputBorder(
-//                   borderRadius: new BorderRadius.circular(10.0),
-//                   borderSide: BorderSide(color: Colors.black),
-//                 ),
-//                 focusedBorder: OutlineInputBorder(
-//                     borderRadius: new BorderRadius.circular(10.0),
-//                     borderSide: BorderSide(color: Colors.blue[400])),
-//                 isDense: true, // Added this
-//                 contentPadding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-//               ),
-//               cursorColor: Colors.black,
-//               style: TextStyle(color: Colors.black),
-//             ),
-//           ),
-//           GestureDetector(
-//               onTap: () {
-//                 print("Login Clicked Event");
-//                 _login();
-//               },
-//               child: Text("Login"))
-//         ],
-//       ),
-//     ));
-//   }
-

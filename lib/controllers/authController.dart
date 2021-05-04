@@ -2,14 +2,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../subpages/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:issherunnin_flutter/subpages/user.dart';
 import '../tabs.dart';
 
 class AuthController extends GetxController {
   FirebaseAuth _auth = FirebaseAuth.instance;
+  final FacebookLogin fbLogin = FacebookLogin();
+  GoogleSignIn _googleSignIn = GoogleSignIn();
   GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
+  RxBool _issigned = false.obs;
+
+  void setIsSigned(bool value) {
+    _issigned.value = value;
+  }
+
   static final FacebookLogin facebookSignIn = new FacebookLogin();
 
   Rxn<User> _firebaseUser = Rxn<User>();
@@ -17,6 +25,7 @@ class AuthController extends GetxController {
   String get user => _firebaseUser.value?.email;
 
   @override
+  // ignore: must_call_super
   void onInit() {
     _firebaseUser.bindStream(_auth.userChanges());
   }
@@ -62,53 +71,62 @@ class AuthController extends GetxController {
     }
   }
 
-  void signInGoogle() async {
-    GoogleSignIn googleSignIn = GoogleSignIn(
-      scopes: ['email', 'profile'],
-      hostedDomain: "localhost",
-      clientId:
-          "com.googleusercontent.apps.583036361329-c1oikefkavt99so5jrr8c9nrat2rb8hk",
-    );
-    final GoogleSignInAccount googleUser = await googleSignIn.signIn();
+  Future<User> signInGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
 
+    // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
+    // Create a new credential
+    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    final UserCredential authResult =
+        await _auth.signInWithCredential(credential);
+    final User user = authResult.user;
+    assert(!user.isAnonymous);
+    assert(await user.getIdToken() != null);
+    final User currentUser = _auth.currentUser;
+    assert(currentUser.uid == user.uid);
+    return user;
+  }
 
-    final User user = (await _auth
-        .signInWithCredential(credential)
-        .then((value) => Get.offAll(UserPage())));
+  void sendpasswordresetemail(String email) async {
+    await _auth.sendPasswordResetEmail(email: email).then((value) {
+      Get.offAll(UserPage());
+      Get.snackbar("Password Reset email link is been sent", "Success");
+    }).catchError(
+        (onError) => Get.snackbar("Error In Email Reset", onError.message));
   }
 
   void signOutGoogle() async {
-    await googleSignIn.signOut().then((value) => Get.offAll(TabsPage()));
+    try {
+      await _googleSignIn.signOut().then((value) => Get.offAll(TabsPage()));
+    } catch (e) {
+      Get.snackbar("Error signing out", e.message,
+          snackPosition: SnackPosition.BOTTOM);
+    }
   }
 
-  Future<dynamic> loginFb() async {
-    final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
+  Future<UserCredential> signInWithFacebook() async {
+    try {
+      // Trigger the sign-in flow
+      final FacebookLoginResult result = await fbLogin.logIn(['email']);
 
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final FacebookAccessToken accessToken = result.accessToken;
-        print('''
-         Logged in!
-         
-         Token: ${accessToken.token}
-         User id: ${accessToken.userId}
-         Expires: ${accessToken.expires}
-         Permissions: ${accessToken.permissions}
-         Declined permissions: ${accessToken.declinedPermissions}
-         ''');
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        print('Login cancelled by the user.');
-        break;
-      case FacebookLoginStatus.error:
-        print('Something went wrong with the login process.\n'
-            'Here\'s the error Facebook gave us: ${result.errorMessage}');
-        break;
+      // Create a credential from the access token
+      final facebookAuthCredential =
+          FacebookAuthProvider.credential(result.accessToken.token);
+
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential);
+    } catch (e) {
+      Get.snackbar("Error signing out", e.message,
+          snackPosition: SnackPosition.BOTTOM);
+      return null;
     }
   }
 }

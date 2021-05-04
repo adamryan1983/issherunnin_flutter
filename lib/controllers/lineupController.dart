@@ -9,6 +9,7 @@ class LineupController extends GetxController {
     selectedSide.value = value;
   }
 
+  // ignore: must_call_super
   void onInit() {}
 
   void setLineupStatus(String cars, String side, String location) async {

@@ -1,9 +1,7 @@
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:issherunnin_flutter/tabs.dart';
-import '../subpages/flanders.dart';
-import '../subpages/legionnaire.dart';
+import '../tabs.dart';
 
 class BoatController extends GetxController {
   final selected = 'Please select a status'.obs;
@@ -11,13 +9,8 @@ class BoatController extends GetxController {
     selected.value = value;
   }
 
-  // set ferryStatus(FerryModel value) => this._ferryModel.value = value;
-
-  // void clear() {
-  //   _ferryModel.value = FerryModel();
-  // }
-
   @override
+  // ignore: must_call_super
   void onInit() {}
 
   setLegionnaireStatus(String status, String reason, String note) async {
@@ -35,12 +28,11 @@ class BoatController extends GetxController {
     };
     await reference
         .add(legionnaire)
-        .then((value) => Get.offAll(Legionnaire()).catchError(
+        .then((value) => Get.off(TabsPage()).catchError(
               (onError) => Get.snackbar(
                   "Error while updating Ferry Status ", onError.message,
                   snackPosition: SnackPosition.BOTTOM),
             ));
-    await Get.offAll(Legionnaire());
   }
 
   setFlandersStatus(String status, String reason, String note) async {
@@ -58,7 +50,7 @@ class BoatController extends GetxController {
     };
     await reference
         .add(flanders)
-        .then((value) => Get.offAll(Flanders()).catchError(
+        .then((value) => Get.offAll(TabsPage()).catchError(
               (onError) => Get.snackbar(
                   "Error while updating Ferry Status ", onError.message,
                   snackPosition: SnackPosition.BOTTOM),
