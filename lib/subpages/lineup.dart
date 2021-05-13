@@ -61,14 +61,14 @@ class LineupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     return Scaffold(
-        appBar: AppBar(
-          title: Image.asset('assets/images/ferrylogo-horizontal.png',
-              fit: BoxFit.cover, width: 300),
-          toolbarHeight: 100,
-          backgroundColor: AppColors.PRIMARY_COLOR,
-        ),
-        body: Container(
-            child: Column(
+      appBar: AppBar(
+        title: Image.asset('assets/images/ferrylogo-horizontal.png',
+            fit: BoxFit.cover, width: 300),
+        toolbarHeight: 100,
+        backgroundColor: AppColors.PRIMARY_COLOR,
+      ),
+      body: Container(
+        child: Column(
           children: <Widget>[
             Container(
                 padding: EdgeInsets.all(20.0),
@@ -116,76 +116,33 @@ class LineupPage extends StatelessWidget {
             ),
             Expanded(
               child: StreamBuilder(
-                  stream: firestore
-                      .collection('lineup')
-                      .orderBy('datetime', descending: true)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: CircularProgressIndicator(),
+                stream: firestore
+                    .collection('lineup')
+                    .orderBy('datetime', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    if (snapshot.data.docs.length > 0) {
+                      return ListView.builder(
+                        itemExtent: 80.0,
+                        itemCount: snapshot.data.docs.length,
+                        itemBuilder: (context, index) =>
+                            _buildListItem(context, snapshot.data.docs[index]),
                       );
                     } else {
-                      if (snapshot.data.docs.length > 0) {
-                        return ListView.builder(
-                          itemExtent: 80.0,
-                          itemCount: snapshot.data.docs.length,
-                          itemBuilder: (context, index) => _buildListItem(
-                              context, snapshot.data.docs[index]),
-                        );
-                      } else {
-                        return Center(child: Text('No items found'));
-                      }
+                      return Center(child: Text('No items found'));
                     }
-                  }),
+                  }
+                },
+              ),
             ),
           ],
-        )));
+        ),
+      ),
+    );
   }
 }
-
-// ListView.builder(
-//             itemCount: entries.length,
-//             itemBuilder: (BuildContext context, int index) {
-//               return Container(
-//                   height: 10,
-//                   color: AppColors.SECONDARY_COLOR,
-//                   child: Center(child: Text('Entry $entries[index')));
-//             })
-//
-
-// Stream collectionStream =
-//     FirebaseFirestore.instance.collection('legionnaire').snapshots();
-// Stream documentStream = FirebaseFirestore.instance
-//     .collection('legionnaire')
-//     .doc('ABC123')
-//     .snapshots();
-
-// class LineupInfo extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     CollectionReference legionnaireUpdate =
-//         FirebaseFirestore.instance.collection('legionnaire');
-
-//     return StreamBuilder<QuerySnapshot>(
-//       stream: legionnaireUpdate.snapshots(),
-//       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-//         if (snapshot.hasError) {
-//           return Text('Something went wrong');
-//         }
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return Text("Loading");
-//         }
-//         return new ListView(
-//           children: snapshot.data.docs.map((DocumentSnapshot document) {
-//             print(document["status"]);
-//             return new ListTile(
-//               title: new Text(document.data()['status']),
-//               subtitle: new Text(document.data()['datetime']),
-//             );
-//           }).toList(),
-//         );
-//       },
-//     );
-//   }
-// }

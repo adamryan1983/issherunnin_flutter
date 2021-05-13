@@ -129,4 +129,8 @@ class AuthController extends GetxController {
       return null;
     }
   }
+
+  void appleLogIn() {
+    print("yo");
+  }
 }

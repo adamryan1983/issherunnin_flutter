@@ -13,6 +13,8 @@ class UserPage extends GetWidget<AuthController> {
   final TextEditingController email = TextEditingController();
   final TextEditingController pass = TextEditingController();
 
+  String errorMessage;
+
   static Route<dynamic> route() => MaterialPageRoute(
         builder: (context) => UserPage(),
       );
@@ -36,7 +38,7 @@ class UserPage extends GetWidget<AuthController> {
                   style: (TextStyle(fontSize: 22))),
             ),
             Padding(
-                padding: EdgeInsets.fromLTRB(20, 10.0, 20.0, 20.0),
+                padding: EdgeInsets.fromLTRB(20, 10.0, 20.0, 0.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[

@@ -5,6 +5,7 @@ import '../tabs.dart';
 
 class BoatController extends GetxController {
   final selected = 'Please select a status'.obs;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   void setSelected(String value) {
     selected.value = value;
   }
@@ -20,6 +21,7 @@ class BoatController extends GetxController {
 
     CollectionReference reference =
         FirebaseFirestore.instance.collection("legionnaire");
+
     Map<String, dynamic> legionnaire = {
       "datetime": DateTime.now(),
       "status": status,

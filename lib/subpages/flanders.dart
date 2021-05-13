@@ -20,13 +20,14 @@ class Flanders extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         Container(
-            width: 120,
-            padding: EdgeInsets.all(4.0),
-            child: Text(
-              dateConvert(timestamp, docs['datetime']),
-              // DateTime.fromMicrosecondsSinceEpoch(docs['datetime']).toDate().toString(),
-              style: TextStyle(fontSize: 12),
-            )),
+          width: 120,
+          padding: EdgeInsets.all(4.0),
+          child: Text(
+            dateConvert(timestamp, docs['datetime']),
+            // DateTime.fromMicrosecondsSinceEpoch(docs['datetime']).toDate().toString(),
+            style: TextStyle(fontSize: 12),
+          ),
+        ),
         Container(
           width: 60,
           padding: EdgeInsets.all(4.0),
@@ -59,54 +60,61 @@ class Flanders extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     return Container(
-        child: Column(
-      children: <Widget>[
-        Container(
+      child: Column(
+        children: <Widget>[
+          Container(
             padding: EdgeInsets.all(20.0),
-            child: Text("Flanders Updates",
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Montserrat',
-                    fontSize: 22))),
-        Container(
-          height: 40.0,
-          color: AppColors.FOURTH_COLOR,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Container(
+            child: Text(
+              "Flanders Updates",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Montserrat',
+                  fontSize: 22),
+            ),
+          ),
+          Container(
+            height: 40.0,
+            color: AppColors.FOURTH_COLOR,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
                   width: 120,
                   padding: EdgeInsets.all(4.0),
                   child: Text(
                     "Date/Time",
                     style: TextStyle(fontSize: 15),
-                  )),
-              Container(
+                  ),
+                ),
+                Container(
                   width: 60,
                   padding: EdgeInsets.all(4.0),
                   child: Text(
                     "Status",
                     style: TextStyle(fontSize: 15),
-                  )),
-              Container(
+                  ),
+                ),
+                Container(
                   width: 100,
                   padding: EdgeInsets.all(4.0),
                   child: Text(
                     "Reason",
                     style: TextStyle(fontSize: 15),
-                  )),
-              Container(
+                  ),
+                ),
+                Container(
                   width: 80,
                   padding: EdgeInsets.all(4.0),
                   child: Text(
                     "Notes",
                     style: TextStyle(fontSize: 15),
-                  )),
-            ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: StreamBuilder(
+          Expanded(
+            child: StreamBuilder(
               stream: firestore
                   .collection('flanders')
                   .orderBy('datetime', descending: true)
@@ -125,12 +133,16 @@ class Flanders extends StatelessWidget {
                           _buildListItem(context, snapshot.data.docs[index]),
                     );
                   } else {
-                    return Center(child: Text('No items found'));
+                    return Center(
+                      child: Text('No items found'),
+                    );
                   }
                 }
-              }),
-        ),
-      ],
-    ));
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

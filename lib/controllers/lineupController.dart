@@ -1,7 +1,7 @@
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../subpages/lineup.dart';
+import '../tabs.dart';
 
 class LineupController extends GetxController {
   final selectedSide = 'Please select a side'.obs;
@@ -13,7 +13,7 @@ class LineupController extends GetxController {
   void onInit() {}
 
   void setLineupStatus(String cars, String side, String location) async {
-    if (side == 'Please select a side') {
+    if (side == 'Please select a side' || side == '') {
       side = 'Bell Island';
     }
     CollectionReference reference =
@@ -26,7 +26,7 @@ class LineupController extends GetxController {
     };
     await reference
         .add(userdata)
-        .then((value) => Get.offAll(LineupPage()).catchError(
+        .then((value) => Get.offAll(TabsPage()).catchError(
               (onError) => Get.snackbar(
                   "Error while updating Lineup Status ", onError.message,
                   snackPosition: SnackPosition.BOTTOM),
