@@ -5,7 +5,6 @@ import '../tabs.dart';
 
 class BoatController extends GetxController {
   final selected = 'Please select a status'.obs;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   void setSelected(String value) {
     selected.value = value;
   }

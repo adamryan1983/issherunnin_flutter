@@ -110,8 +110,8 @@ class _UpdateLineupState extends State<UpdateLineup> {
                                   if (_formKey.currentState.validate()) {
                                     _formKey.currentState.save();
                                     controller.setLineupStatus(
-                                        controller.selectedSide.value,
                                         cars,
+                                        controller.selectedSide.value,
                                         location);
                                   }
                                 },
@@ -124,8 +124,8 @@ class _UpdateLineupState extends State<UpdateLineup> {
                                   if (_formKey.currentState.validate()) {
                                     _formKey.currentState.save();
                                     controller.setLineupStatus(
-                                        controller.selectedSide.value,
                                         cars,
+                                        controller.selectedSide.value,
                                         location);
                                   }
                                 },

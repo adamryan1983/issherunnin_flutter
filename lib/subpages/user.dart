@@ -23,6 +23,7 @@ class UserPage extends GetWidget<AuthController> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Image.asset('assets/images/ferrylogo-horizontal.png',
               fit: BoxFit.cover, width: 300),

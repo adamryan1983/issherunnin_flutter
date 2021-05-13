@@ -31,6 +31,7 @@ class _UpdateLegionnaireState extends State<UpdateLegionnaire> {
   Widget build(BuildContext context) {
     final BoatController controller = Get.put(BoatController());
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: AppColors.MAINTEXTWHITE, //change your color here

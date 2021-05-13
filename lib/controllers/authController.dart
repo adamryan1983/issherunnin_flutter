@@ -72,6 +72,7 @@ class AuthController extends GetxController {
   }
 
   Future<User> signInGoogle() async {
+
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
 
@@ -91,6 +92,7 @@ class AuthController extends GetxController {
     assert(await user.getIdToken() != null);
     final User currentUser = _auth.currentUser;
     assert(currentUser.uid == user.uid);
+
     return user;
   }
 
