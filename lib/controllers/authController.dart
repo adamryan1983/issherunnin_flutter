@@ -1,10 +1,17 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
+import 'package:crypto/crypto.dart';
+
 import 'package:issherunnin_flutter/subpages/user.dart';
+
 import '../tabs.dart';
 
 class AuthController extends GetxController {
@@ -72,28 +79,32 @@ class AuthController extends GetxController {
   }
 
   Future<User> signInGoogle() async {
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
 
-    // Trigger the authentication flow
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+      // Create a new credential
+      final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      final UserCredential authResult =
+          await _auth.signInWithCredential(credential);
+      final User user = authResult.user;
+      assert(!user.isAnonymous);
+      assert(await user.getIdToken() != null);
+      final User currentUser = _auth.currentUser;
+      assert(currentUser.uid == user.uid);
 
-    // Create a new credential
-    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    final UserCredential authResult =
-        await _auth.signInWithCredential(credential);
-    final User user = authResult.user;
-    assert(!user.isAnonymous);
-    assert(await user.getIdToken() != null);
-    final User currentUser = _auth.currentUser;
-    assert(currentUser.uid == user.uid);
-
-    return user;
+      return user;
+    } catch (e) {
+      Get.snackbar("Error", e.message, snackPosition: SnackPosition.BOTTOM);
+      return null;
+    }
   }
 
   void sendpasswordresetemail(String email) async {
@@ -132,7 +143,131 @@ class AuthController extends GetxController {
     }
   }
 
-  void appleLogIn() {
-    print("yo");
+  String generateNonce([int length = 32]) {
+    final charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
+  }
+
+  /// Returns the sha256 hash of [input] in hex notation.
+  String sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
+  Future<User> signInWithApple() async {
+    // try {
+    //   User user = await FirebaseAuthOAuth()
+    //       .openSignInFlow("apple.com", ["email"], {"locale": "en"});
+    //   return user;
+    // } catch (e) {
+    //   Get.snackbar("Error signing in", e.message,
+    //       snackPosition: SnackPosition.BOTTOM);
+    //   return null;
+    // }
+    try {
+      final AuthorizationResult result = await TheAppleSignIn.performRequests([
+        AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+      ]);
+      print("successfull sign in");
+      final AppleIdCredential appleIdCredential = result.credential;
+
+      OAuthProvider oAuthProvider = new OAuthProvider("apple.com");
+      final AuthCredential credential = oAuthProvider.credential(
+        idToken: String.fromCharCodes(appleIdCredential.identityToken),
+        accessToken: String.fromCharCodes(appleIdCredential.authorizationCode),
+      );
+
+      final UserCredential _res =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      await FirebaseAuth.instance.currentUser.updateDisplayName(
+        _res.user.email,
+      );
+      final User user = _res.user;
+      final User currentUser = _auth.currentUser;
+      assert(currentUser.uid == user.uid);
+      print(currentUser.email);
+      return user;
+    } catch (error) {
+      print("error with apple sign in");
+      Get.snackbar("Error signing in", error.message,
+          snackPosition: SnackPosition.BOTTOM);
+      return null;
+    }
   }
 }
+
+
+// Future<User> signInWithApple() async {
+//   // try {
+//   //   User user = await FirebaseAuthOAuth()
+//   //       .openSignInFlow("apple.com", ["email"], {"locale": "en"});
+//   //   return user;
+//   // } catch (e) {
+//   //   Get.snackbar("Error signing in", e.message,
+//   //       snackPosition: SnackPosition.BOTTOM);
+//   //   return null;
+//   // }
+//   try {
+//     final AuthorizationResult result = await TheAppleSignIn.performRequests([
+//       AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+//     ]);
+//     print("successfull sign in");
+//     final AppleIdCredential appleIdCredential = result.credential;
+
+//     OAuthProvider oAuthProvider = new OAuthProvider("apple.com");
+//     final AuthCredential credential = oAuthProvider.credential(
+//       idToken: String.fromCharCodes(appleIdCredential.identityToken),
+//       accessToken: String.fromCharCodes(appleIdCredential.authorizationCode),
+//     );
+
+//     final UserCredential _res =
+//         await FirebaseAuth.instance.signInWithCredential(credential);
+
+//     await FirebaseAuth.instance.currentUser.updateDisplayName(
+//       '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}',
+//     );
+//     return null;
+//   } catch (error) {
+//     print("error with apple sign in");
+//     Get.snackbar("Error signing in", error.message,
+//         snackPosition: SnackPosition.BOTTOM);
+//     return null;
+//   }
+// }
+
+
+
+// To prevent replay attacks with the credential returned from Apple, we
+    // include a nonce in the credential request. When signing in with
+    // Firebase, the nonce in the id token returned by Apple, is expected to
+    // match the sha256 hash of `rawNonce`.
+    // final rawNonce = generateNonce();
+    // final nonce = sha256ofString(rawNonce);
+
+    // // Request credential for the currently signed in Apple account.
+    // final appleCredential = await SignInWithApple.getAppleIDCredential(
+    //   scopes: [
+    //     AppleIDAuthorizationScopes.email,
+    //     AppleIDAuthorizationScopes.fullName,
+    //   ],
+    //   nonce: nonce,
+    // );
+
+    // // Create an `OAuthCredential` from the credential returned by Apple.
+    // final oauthCredential = OAuthProvider("apple.com").credential(
+    //   idToken: appleCredential.identityToken,
+    //   rawNonce: rawNonce,
+    // );
+    // final UserCredential authResult =
+    //     await _auth.signInWithCredential(oauthCredential);
+    // final User user = authResult.user;
+    // final User currentUser = _auth.currentUser;
+    // assert(currentUser.uid == user.uid);
+    // print(user);
+
+    // return user;

@@ -1,7 +1,9 @@
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:issherunnin_flutter/controllers/authController.dart';
 import '../tabs.dart';
+import 'package:get/get.dart';
 
 class LineupController extends GetxController {
   final selectedSide = 'Please select a side'.obs;
@@ -23,6 +25,7 @@ class LineupController extends GetxController {
       "cars": cars,
       "side": side,
       "geolocation": location,
+      "user": Get.find<AuthController>().user,
     };
     await reference
         .add(userdata)

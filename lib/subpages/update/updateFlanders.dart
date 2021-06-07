@@ -30,6 +30,7 @@ class _UpdateFlandersState extends State<UpdateFlanders> {
   @override
   Widget build(BuildContext context) {
     final BoatController controller = Get.put(BoatController());
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -85,7 +86,7 @@ class _UpdateFlandersState extends State<UpdateFlanders> {
                           labelText: "Enter reason (if known)",
                           hintText: "i.e. engine trouble",
                         ),
-                        autofocus: true,
+                        autofocus: false,
                         keyboardType: TextInputType.text,
                         // ignore: missing_return
                         validator: (value) {
@@ -100,7 +101,7 @@ class _UpdateFlandersState extends State<UpdateFlanders> {
                           labelText: "Additional Notes",
                           hintText: "i.e. will be repaired in 2hrs",
                         ),
-                        autofocus: true,
+                        autofocus: false,
                         keyboardType: TextInputType.text,
                         // ignore: missing_return
                         validator: (value) {

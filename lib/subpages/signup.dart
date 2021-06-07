@@ -47,7 +47,7 @@ class Signup extends GetWidget<AuthController> {
                           labelText: "First Name",
                           hintText: "John",
                         ),
-                        autofocus: true,
+                        autofocus: false,
                       ),
                       TextField(
                         controller: lastn,
@@ -55,7 +55,7 @@ class Signup extends GetWidget<AuthController> {
                           labelText: "Last Name",
                           hintText: "Smith",
                         ),
-                        autofocus: true,
+                        autofocus: false,
                       ),
                       TextField(
                         controller: email,
@@ -63,14 +63,14 @@ class Signup extends GetWidget<AuthController> {
                           labelText: "Email",
                           hintText: "example@mail.com",
                         ),
-                        autofocus: true,
+                        autofocus: false,
                       ),
                       TextField(
                         controller: password,
                         decoration: InputDecoration(
                           labelText: "Password",
                         ),
-                        autofocus: true,
+                        autofocus: false,
                         obscureText: true,
                       ),
                       Container(

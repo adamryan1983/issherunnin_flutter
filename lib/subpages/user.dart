@@ -50,14 +50,14 @@ class UserPage extends GetWidget<AuthController> {
                         // controller: passwordController,
                         hintText: "example@mail.com",
                       ),
-                      autofocus: true,
+                      autofocus: false,
                     ),
                     TextField(
                       controller: pass,
                       decoration: InputDecoration(
                         labelText: "Password",
                       ),
-                      autofocus: true,
+                      autofocus: false,
                       obscureText: true,
                     ),
                     Container(
@@ -105,21 +105,23 @@ class UserPage extends GetWidget<AuthController> {
             Divider(),
             SignInButton(
               Buttons.GoogleDark,
-              onPressed: () {
-                controller.signInGoogle();
+              onPressed: () async {
+                await controller.signInGoogle();
               },
             ),
             Divider(),
             SignInButton(
               Buttons.FacebookNew,
-              onPressed: () {
-                controller.signInWithFacebook();
+              onPressed: () async {
+                await controller.signInWithFacebook();
               },
             ),
             Divider(),
             SignInButton(
               Buttons.Apple,
-              onPressed: () {},
+              onPressed: () async {
+                await controller.signInWithApple();
+              },
             ),
           ],
         ),

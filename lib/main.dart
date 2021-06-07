@@ -14,18 +14,27 @@ void main() async {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      initialBinding: AuthBinder(),
-      title: "Is She Runnin'?",
-      theme: ThemeData(
-          fontFamily: 'Montserrat',
-          backgroundColor: AppColors.PRIMARY_COLOR,
-          primaryColor: AppColors.PRIMARY_COLOR,
-          primaryColorLight: AppColors.MAINTEXTBLACK,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          scaffoldBackgroundColor: AppColors.MAINBGWHITE),
-      home: TabsPage(),
-      debugShowCheckedModeBanner: false,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: GetMaterialApp(
+        initialBinding: AuthBinder(),
+        title: "Is She Runnin'?",
+        theme: ThemeData(
+            fontFamily: 'Montserrat',
+            backgroundColor: AppColors.PRIMARY_COLOR,
+            primaryColor: AppColors.PRIMARY_COLOR,
+            primaryColorLight: AppColors.MAINTEXTBLACK,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            scaffoldBackgroundColor: AppColors.MAINBGWHITE),
+        home: TabsPage(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
@@ -70,6 +79,22 @@ class Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Container(child: Text("Loading up")));
+    return MaterialApp(
+      home: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Image.asset('assets/images/splash.png',
+                fit: BoxFit.cover, width: 250),
+            Container(
+              width: 220,
+              padding: EdgeInsets.all(4.0),
+              child: Text("Loading",
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white)),
+            ),
+          ]),
+    );
   }
 }

@@ -85,7 +85,7 @@ class _UpdateLegionnaireState extends State<UpdateLegionnaire> {
                           labelText: "Enter reason (if known)",
                           hintText: "i.e. engine trouble",
                         ),
-                        autofocus: true,
+                        autofocus: false,
                         keyboardType: TextInputType.text,
                         // ignore: missing_return
                         validator: (value) {
@@ -100,7 +100,7 @@ class _UpdateLegionnaireState extends State<UpdateLegionnaire> {
                           labelText: "Additional Notes",
                           hintText: "i.e. will be repaired in 2hrs",
                         ),
-                        autofocus: true,
+                        autofocus: false,
                         keyboardType: TextInputType.text,
                         // ignore: missing_return
                         validator: (value) {

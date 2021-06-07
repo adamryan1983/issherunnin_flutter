@@ -31,30 +31,36 @@ class IsLogged extends GetWidget<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Image.asset('assets/images/ferrylogo-horizontal.png',
-              fit: BoxFit.cover, width: 300),
-          toolbarHeight: 100,
-          backgroundColor: AppColors.PRIMARY_COLOR,
-        ),
-        body: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-              Container(
-                  child: Text(controller.user,
-                      style: TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.w600))),
-              Image.asset('assets/images/logo.png',
-                  fit: BoxFit.cover, width: 250),
-              Container(
-                  child: ElevatedButton(
+      appBar: AppBar(
+        title: Image.asset('assets/images/ferrylogo-horizontal.png',
+            fit: BoxFit.cover, width: 300),
+        toolbarHeight: 100,
+        backgroundColor: AppColors.PRIMARY_COLOR,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              child: Text(
+                controller.user,
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+              ),
+            ),
+            Image.asset('assets/images/logo.png',
+                fit: BoxFit.cover, width: 250),
+            Container(
+              child: ElevatedButton(
                 child: Text("Log Out"),
                 onPressed: () {
                   controller.signOut();
                 },
-              )),
-            ])));
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -39,6 +39,9 @@ dependencies:
   google_sign_in: ^5.0.2
   http: ^0.13.2
   the_apple_sign_in: ^1.1.1
+  sign_in_with_apple: ^3.0.0
+  firebase_auth_oauth: ^1.0.1
+  crypto: ^3.0.1
 
 dev_dependencies:
   flutter_test:
