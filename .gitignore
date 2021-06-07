@@ -51,3 +51,5 @@ app.*.map.json
 
 *.jks
 key*.properties
+
+/ios/Runner/GoogleService-Info.plist
